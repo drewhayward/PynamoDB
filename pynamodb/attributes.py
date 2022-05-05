@@ -69,12 +69,16 @@ class Attribute(Generic[_T]):
         default: Optional[Union[_T, Callable[..., _T]]] = None,
         default_for_new: Optional[Union[Any, Callable[..., _T]]] = None,
         attr_name: Optional[str] = None,
+        deprecated: bool = False
     ) -> None:
         if default and default_for_new:
             raise ValueError("An attribute cannot have both default and default_for_new parameters")
         self.default = default
         # This default is only set for new objects (ie: it's not set for re-saved objects)
         self.default_for_new = default_for_new
+        
+        if deprecated:
+            warnings.warn(f"The field {self.__name__} is deprecated and should no-longer be used.")
 
         if null is not None:
             self.null = null
